@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category Navigation</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .category-item {
+            background-color: #171717;
+            border-radius: 15px;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+        }
+
+        .category-label {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="category-container">
+        <div class="category-item" onclick="redirectTo('timer.html')">
+            <img class="category-icon" src="icons/clock.svg">
+            <span class="category-label">Timer</span>
+        </div>
+        <div class="category-item" onclick="redirectTo('qrcodegenerator.html')">
+            <img class="category-icon" src="icons/qrcode.svg">
+            <span class="category-label">QR-Code</span>
+        </div>
+        <div class="category-item" onclick="redirectTo('counter.html')">
+            <img class="category-icon" src="icons/counter.svg">
+            <span class="category-label">Counter</span>
+        </div>
+
+    </div>
+
+    <script>
+         function redirectTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

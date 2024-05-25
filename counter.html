@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .counter-button {
+            width: 90vmin; /* 90% of the smaller of viewport width or height */
+            height: 90vmin; /* Same as width to make it round */
+            border-radius: 50%; /* Ensuring the button is completely round */
+            background-color: #171717;
+            border: none;
+            color: white;
+            font-size: 100px;
+            text-size-adjust: 5%;
+            cursor: pointer;
+            box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .counter-button:hover {
+            background-color: #131313;
+        }
+    </style>
+</head>
+<body>
+    <button class="counter-button" onclick="incrementCounter()">0</button>
+
+    <script>
+        let counter = 0;
+        let button = document.querySelector('.counter-button');
+
+        function incrementCounter() {
+            counter++;
+            button.textContent = counter;
+            adjustFontSize();
+        }
+
+        function adjustFontSize() {
+            const buttonWidth = button.offsetWidth;
+            const buttonHeight = button.offsetHeight;
+            const textWidth = button.scrollWidth;
+            const textHeight = button.scrollHeight;
+
+            const scaleFactorWidth = buttonWidth / textWidth;
+            const scaleFactorHeight = buttonHeight / textHeight;
+            const scaleFactor = Math.min(scaleFactorWidth, scaleFactorHeight);
+
+            const fontSize = Math.floor(parseFloat(window.getComputedStyle(button).fontSize) * scaleFactor);
+            button.style.fontSize = fontSize + 'px';
+        }
+    </script>
+</body>
+</html>

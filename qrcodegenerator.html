@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .input-container, .wifi-input-container {
+            margin-bottom: 20px;
+        }
+
+        .input-container input, .wifi-input-container input {
+            width: 300px;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background-color: #171717;
+            margin-bottom: 10px;
+        }
+
+        .generate-btn, .toggle-btn {
+            background-color: #171717;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .generate-btn:hover, .toggle-btn:hover {
+            background-color: #131313;
+        }
+
+        .qr-container {
+            position: relative;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .download-icon {
+            position: absolute;
+            right: -190px;
+            top: -215px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: none;
+            background-color: #131313f5;
+            border-radius: 5px;
+        }
+
+        .wifi-input-container {
+            display: none;
+            flex-direction: column;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <input type="text" id="urlInput" placeholder="Enter text">
+    </div>
+    <div class="wifi-input-container" id="wifiInputContainer">
+        <input type="text" id="ssidInput" placeholder="Enter SSID">
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+    </div>
+    <button class="toggle-btn" onclick="toggleInputs()">Switch to Wi-Fi</button>
+    <button class="generate-btn" onclick="generateQRCode()">Generate</button>
+    <div class="qr-container" id="qrContainer">
+        <canvas id="qrcode"></canvas>
+        <img src="icons/download_icon.svg" class="download-icon" id="downloadIcon" onclick="downloadQRCode()">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2"></script>
+    <script>
+        var isWifiMode = false;
+
+        function toggleInputs() {
+            isWifiMode = !isWifiMode;
+            document.querySelector('.input-container').style.display = isWifiMode ? 'none' : 'block';
+            document.querySelector('#wifiInputContainer').style.display = isWifiMode ? 'flex' : 'none';
+            document.querySelector('.toggle-btn').textContent = isWifiMode ? 'Switch to URL' : 'Switch to Wi-Fi';
+        }
+
+        function generateQRCode() {
+            var qrContainer = document.getElementById('qrContainer');
+            var qrCodeCanvas = document.getElementById('qrcode');
+            qrCodeCanvas.innerHTML = '';
+
+            if (isWifiMode) {
+                var ssid = document.getElementById('ssidInput').value;
+                var password = document.getElementById('passwordInput').value;
+                if (ssid.trim() !== '') {
+                    var wifiString = `WIFI:T:WPA;S:${ssid};P:${password};;`;
+                    new QRious({
+                        element: qrCodeCanvas,
+                        value: wifiString,
+                        size: 200,
+                        foreground: 'white',
+                        background: 'black'
+                    });
+                }
+            } else {
+                var url = document.getElementById('urlInput').value;
+                if (url.trim() !== '') {
+                    new QRious({
+                        element: qrCodeCanvas,
+                        value: url,
+                        size: 200,
+                        foreground: 'white',
+                        background: 'black'
+                    });
+                }
+            }
+
+            qrContainer.style.display = 'block';
+            document.getElementById('downloadIcon').style.display = 'block';
+        }
+
+        function downloadQRCode() {
+            var qrCodeCanvas = document.getElementById('qrcode');
+            var dataURL = qrCodeCanvas.toDataURL("image/png");
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'QRCode.png';
+            link.click();
+        }
+    </script>
+</body>
+</html>
