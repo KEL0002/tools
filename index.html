@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Category Navigation</title>
+    <title>CPS Test</title>
     <style>
         body {
             background-color: #212121;
@@ -12,16 +12,37 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            flex-direction: column;
         }
 
-        .category-container {
+        .cps-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .category-item {
+        .cps-button {
+            width: 90vmin; /* 90% of the smaller of viewport width or height */
+            height: 90vmin; /* Same as width to make it round */
+            border-radius: 50%; /* Ensuring the button is completely round */
+            background-color: #171717;
+            border: none;
+            color: white;
+            font-size: 100px;
+            cursor: pointer;
+            box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cps-button:hover {
+            background-color: #131313;
+        }
+
+        .stats-container {
             background-color: #171717;
             border-radius: 15px;
             padding: 20px;
@@ -31,42 +52,99 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            cursor: pointer;
         }
 
-        .category-icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 10px;
-        }
-
-        .category-label {
+        .high-score, .average-score {
             font-size: 24px;
-            font-weight: bold;
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <div class="category-container">
-        <div class="category-item" onclick="redirectTo('timer.html')">
-            <img class="category-icon" src="icons/clock.svg">
-            <span class="category-label">Timer</span>
+    <div class="cps-container">
+        <button class="cps-button" onclick="registerClick()">0</button>
+        <div class="stats-container">
+            <div class="high-score">Highest CPS: 0</div>
+            <div class="average-score">Average CPS: 0</div>
         </div>
-        <div class="category-item" onclick="redirectTo('qrcodegenerator.html')">
-            <img class="category-icon" src="icons/qrcode.svg">
-            <span class="category-label">QR-Code</span>
-        </div>
-        <div class="category-item" onclick="redirectTo('counter.html')">
-            <img class="category-icon" src="icons/counter.svg">
-            <span class="category-label">Counter</span>
-        </div>
-
     </div>
 
     <script>
-         function redirectTo(page) {
-            window.location.href = page;
+        let clickTimes = [];
+        let highestCPS = 0;
+        let totalClicks = 0;
+        let totalTime = 0;
+        let lastClickTime = 0;
+        let isFirstSecond = false;
+        let button = document.querySelector('.cps-button');
+        let highScoreDisplay = document.querySelector('.high-score');
+        let averageScoreDisplay = document.querySelector('.average-score');
+
+        function registerClick() {
+            const now = Date.now();
+            clickTimes.push(now);
+
+            // Determine if this is the first click after a period of inactivity
+            if (now - lastClickTime > 1000) {
+                isFirstSecond = true;
+            }
+
+            lastClickTime = now;
+
+            // Remove clicks older than 1 second
+            clickTimes = clickTimes.filter(time => now - time <= 1000);
+
+            button.textContent = clickTimes.length;
+            adjustFontSize();
         }
+
+        function updateCPS() {
+            const now = Date.now();
+
+            // Remove clicks older than 1 second
+            clickTimes = clickTimes.filter(time => now - time <= 1000);
+
+            const currentCPS = clickTimes.length;
+            button.textContent = currentCPS;
+
+            if (currentCPS > highestCPS) {
+                highestCPS = currentCPS;
+                highScoreDisplay.textContent = `Highest CPS: ${highestCPS}`;
+            }
+
+            if (currentCPS > 0) {
+                if (!isFirstSecond) {
+                    totalClicks += currentCPS;
+                    totalTime++;
+                    const averageCPS = (totalClicks / totalTime).toFixed(2);
+                    averageScoreDisplay.textContent = `Average CPS: ${averageCPS}`;
+                } else {
+                    // Skip the first second after the user starts clicking again
+                    isFirstSecond = false;
+                }
+            }
+
+            adjustFontSize();
+        }
+
+        setInterval(updateCPS, 1000);
+
+        function adjustFontSize() {
+            const buttonWidth = button.offsetWidth;
+            const buttonHeight = button.offsetHeight;
+            const textWidth = button.scrollWidth;
+            const textHeight = button.scrollHeight;
+
+            const scaleFactorWidth = buttonWidth / textWidth;
+            const scaleFactorHeight = buttonHeight / textHeight;
+            const scaleFactor = Math.min(scaleFactorWidth, scaleFactorHeight);
+
+            const fontSize = Math.floor(parseFloat(window.getComputedStyle(button).fontSize) * scaleFactor);
+            button.style.fontSize = fontSize + 'px';
+        }
+
+        window.addEventListener('resize', adjustFontSize);
+        adjustFontSize();
     </script>
 </body>
 </html>
