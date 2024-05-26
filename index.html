@@ -73,8 +73,12 @@
 
     <script>
          function redirectTo(page) {
-            window.location.href = page;
+            if (!page.endsWith('.html')) {
+                page += '.html';
+            }
+            window.location.href = page.replace('.html', '');
         }
+
     </script>
 </body>
 </html>
