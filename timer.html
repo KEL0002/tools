@@ -15,6 +15,36 @@
             margin: 0;
         }
 
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .home-button:hover {
+            background-color: #131313;
+            border-radius: 5px;
+            ;
+        }
+
+        .home-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+        .home-label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
         .timer-container {
             background-color: #171717;
             border-radius: 15px;
@@ -55,6 +85,13 @@
     </style>
 </head>
 <body>
+
+
+    <button class="home-button" onclick="redirectTo('index.html')">
+        <img class="home-icon" src="icons/home.svg" alt="Home">
+        <span class="home-label">Home</span>
+    </button>
+
     <div class="timer-container">
         <div class="timer-display" id="timerDisplay">00:00:00:000</div>
         <div class="timer-controls">
