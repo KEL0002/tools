@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Editor</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .home-button:hover {
+            background-color: #131313;
+            border-radius: 5px;
+        }
+
+        .home-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+        .home-label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .editor-container {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .editor-toolbar button {
+            background-color: #171717;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .editor-toolbar button:hover {
+            background-color: #131313;
+        }
+
+        .editor-textarea {
+            flex-grow: 1;
+            background-color: #171717;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            resize: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-button" onclick="redirectTo('index.html')">
+        <img class="home-icon" src="icons/home.svg" alt="Home">
+        <span class="home-label">Home</span>
+    </button>
+
+    <div class="editor-container">
+        <div class="editor-toolbar">
+            <button onclick="downloadFile()">Download</button>
+        </div>
+        <textarea class="editor-textarea" id="editorTextarea"></textarea>
+    </div>
+
+    <script>
+        function downloadFile() {
+            const textContent = document.getElementById('editorTextarea').value;
+            const blob = new Blob([textContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'file.txt';
+            link.click();
+        }
+
+        function redirectTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>
